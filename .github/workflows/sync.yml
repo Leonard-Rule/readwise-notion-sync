@@ -16,6 +16,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
+      - name: Restore synced items cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .last_sync_time.json
+            .synced_items.json
+          key: readwise-sync-state-${{ github.run_id }}
+          restore-keys: |
+            readwise-sync-state-
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
