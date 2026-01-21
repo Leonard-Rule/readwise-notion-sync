@@ -234,5 +234,5 @@ MIT License - Feel free to use and modify!
 Created to make syncing Readwise highlights to Notion seamless and automatic!
 
 If you find this useful, give it a ⭐️ on GitHub! 
-[Buy me a coffee:](https://buymeacoffee.com/leorule)
+[Buy me a coffee](https://buymeacoffee.com/leorule)
 
