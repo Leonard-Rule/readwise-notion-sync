@@ -23,8 +23,8 @@ For each item in Readwise (books, articles, podcasts, tweets, PDFs, etc.):
 - ✅ Last synced timestamp
 - ✅ Link to view in Readwise
 
-**Note:** 
-- Highlights are sorted chronologically - oldest highlights at the top, newest at the bottom
+**Notes:** 
+- **Manual edits are protected:** Once synced, only NEW highlights (created after last sync) are added. If you delete or edit highlights in Notion, they won't come back!
 
 ## 🚀 Quick Setup (5 minutes)
 
@@ -71,17 +71,23 @@ The Database ID is the 32-character string (with or without dashes).
    - Go to your repository
    - Click **Settings** → **Secrets and variables** → **Actions**
    - Click **"New repository secret"**
-   - Add these three secrets:
+   - Add these secrets:
 
+   **Required Secrets:**
    | Name | Value | Example |
    |------|-------|---------|
    | `READWISE_TOKEN` | Your Readwise access token | `gVoJIFpTJS8...` |
    | `NOTION_TOKEN` | Your Notion integration token | `ntn_117358903...` or `secret_...` |
    | `NOTION_DATABASE_ID` | Your database ID (with or without dashes) | `1762bb83799381ad8869c0b790c557af` |
 
+   **Optional Secrets:**
+   | Name | Value | Description |
+   |------|-------|-------------|
+   | `DAYS_TO_SYNC` | Number (e.g., `7`, `14`, `30`) | Limit sync to highlights from last N days. If not set, syncs all new highlights since last run. |
+
 ### Step 5: Configure Your Notion Database
 
-Your Notion database needs these properties:
+Your Notion database needs these properties (columns):
 
 **Required Properties:**
 - `Title` (Title type)
@@ -112,6 +118,41 @@ Want to test before waiting for the schedule?
 3. Click **"Run workflow"** → **"Run workflow"**
 4. Watch it run!
 5. Check your Notion database for synced highlights 🎉
+
+---
+
+## ⚡ How It Works (Efficiency)
+
+The script uses multiple optimizations to be as fast as possible:
+
+### **Optimization 1: Time-Based Filtering**
+**First Run:**
+- Syncs ALL your Readwise items to Notion (books, articles, podcasts, tweets, etc.)
+
+**Subsequent Runs:**
+- Only checks items that have NEW highlights since the last sync
+- Skips everything else (much faster!)
+- Uses Readwise's `updatedAfter` filter to be efficient
+
+### **Optimization 2: Skip Unchanged Highlights**
+If an item already exists in Notion and the highlight count hasn't changed, the script skips fetching and checking highlights entirely.
+
+**Example:**
+- You re-read an old article but don't add new highlights
+- The script updates metadata but skips the highlight sync
+- Saves API calls and processing time
+
+### **The Result:**
+The script saves a timestamp file (`.last_sync_time.json`) to track the last successful sync. This means:
+- ✅ Fast syncs (only processes what changed)
+- ✅ Minimal API usage (batch queries + smart skipping)
+- ✅ No wasted time checking items without new highlights
+- ✅ Respects deletions (won't recreate items you've deleted from Notion)
+
+**Real-World Example:**
+- You have 500 items in Readwise (books, articles, podcasts, etc.)
+- You highlight from 2 articles today
+- 1 Notion query + only fetch highlights for changed items ✅
 
 ---
 
@@ -150,7 +191,7 @@ schedule:
 
 Different Readwise categories map to your Notion categories.
 
-Edit `readwise_notion_sync.py`, line ~21:
+Edit `readwise_notion_sync.py`, line ~31:
 
 ```python
 CATEGORY_MAP = {
@@ -163,6 +204,20 @@ CATEGORY_MAP = {
 ```
 
 Change the values on the right to match your Notion category options.
+```
+
+**Option 2: Use command line (one-time override)**
+
+```bash
+# Sync only last 7 days
+python readwise_notion_sync.py --days 7
+
+# Sync only last 30 days
+python readwise_notion_sync.py --days 30
+
+# Sync everything (ignore last sync time)
+python readwise_notion_sync.py --all
+```
 
 ---
 
@@ -230,9 +285,11 @@ MIT License - Feel free to use and modify!
 ---
 
 ## 🎉 Credits
-
 Created to make syncing Readwise highlights to Notion seamless and automatic!
 
 If you find this useful, give it a ⭐️ on GitHub! 
 [Buy me a coffee](https://buymeacoffee.com/leorule)
 
+Created to make syncing Readwise highlights to Notion seamless and automatic!
+
+If you find this useful, give it a ⭐️ on GitHub!
