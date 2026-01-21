@@ -24,7 +24,6 @@ For each item in Readwise (books, articles, podcasts, tweets, PDFs, etc.):
 - ✅ Link to view in Readwise
 
 **Note:** 
-- Readwise's API calls everything a "book" but this includes ALL content types!
 - Highlights are sorted chronologically - oldest highlights at the top, newest at the bottom
 
 ## 🚀 Quick Setup (5 minutes)
@@ -56,7 +55,7 @@ For each item in Readwise (books, articles, podcasts, tweets, PDFs, etc.):
 Your database URL looks like:
 ```
 https://www.notion.so/workspace/1762bb83799381ad8869c0b790c557af?v=...
-                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                                  This is your Database ID
 ```
 
@@ -82,7 +81,7 @@ The Database ID is the 32-character string (with or without dashes).
 
 ### Step 5: Configure Your Notion Database
 
-Your Notion database needs these properties (columns):
+Your Notion database needs these properties:
 
 **Required Properties:**
 - `Title` (Title type)
@@ -113,49 +112,6 @@ Want to test before waiting for the schedule?
 3. Click **"Run workflow"** → **"Run workflow"**
 4. Watch it run!
 5. Check your Notion database for synced highlights 🎉
-
----
-
-## ⚡ How It Works (Efficiency)
-
-The script uses multiple optimizations to be as fast as possible:
-
-### **Optimization 1: Time-Based Filtering**
-**First Run:**
-- Syncs ALL your Readwise items to Notion (books, articles, podcasts, tweets, etc.)
-
-**Subsequent Runs:**
-- Only checks items that have NEW highlights since the last sync
-- Skips everything else (much faster!)
-- Uses Readwise's `updatedAfter` filter to be efficient
-
-### **Optimization 2: Batch Notion Queries**
-Instead of searching Notion individually for each item (50 items = 50 API calls), the script queries all at once in a single request (50 items = 1 API call).
-
-**Example:**
-- Old way: Check item 1, check item 2, check item 3... ❌
-- New way: Check all items at once ✅
-
-### **Optimization 3: Skip Unchanged Highlights**
-If an item already exists in Notion and the highlight count hasn't changed, the script skips fetching and checking highlights entirely.
-
-**Example:**
-- You re-read an old article but don't add new highlights
-- The script updates metadata but skips the highlight sync
-- Saves API calls and processing time
-
-### **The Result:**
-The script saves a timestamp file (`.last_sync_time.json`) to track the last successful sync. This means:
-- ✅ Fast syncs (only processes what changed)
-- ✅ Minimal API usage (batch queries + smart skipping)
-- ✅ No wasted time checking items without new highlights
-
-**Real-World Example:**
-- You have 500 items in Readwise (books, articles, podcasts, etc.)
-- You highlight from 2 articles today
-- **Old way:** 500 individual Notion queries + fetch all highlights ❌
-- **New way:** 1 Notion query + only fetch highlights for changed items ✅
-- **Time saved:** ~90% faster!
 
 ---
 
@@ -277,4 +233,5 @@ MIT License - Feel free to use and modify!
 
 Created to make syncing Readwise highlights to Notion seamless and automatic!
 
-If you find this useful, give it a ⭐️ on GitHub!
+If you find this useful, give it a ⭐️ on GitHub! 
+
