@@ -41,6 +41,7 @@ jobs:
           READWISE_TOKEN: ${{ secrets.READWISE_TOKEN }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          DAYS_TO_SYNC: ${{ secrets.DAYS_TO_SYNC }}
         run: |
           python readwise_notion_sync.py
       
