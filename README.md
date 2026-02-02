@@ -26,7 +26,7 @@ For each item in Readwise (books, articles, podcasts, tweets, PDFs, etc.):
 **Notes:** 
 - **Manual edits are protected:** Once synced, only NEW highlights (created after last sync) are added. If you delete or edit highlights in Notion, they won't come back!
 
-## 🚀 Quick Setup (10 minutes) (7 min Video Guide [Here](https://youtu.be/LM30oxEo_3I)
+## 🚀 Quick Setup (10 minutes) 7 min Video Guide [Here](https://youtu.be/LM30oxEo_3I)
 
 ### Step 1: Get Your API Tokens
 
